@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HONEYBEE — a little bee fills the hive before sunset</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #dff3ff; height: 100%; }
+  body { display: flex; align-items: center; justify-content: center; font-family: sans-serif; }
+  #wrap { text-align: center; }
+  canvas {
+    display: block;
+    width: 960px;
+    height: 600px;
+    max-width: 96vw;
+    max-height: 86vh;
+    border-radius: 14px;
+    box-shadow: 0 12px 40px rgba(43, 58, 43, 0.35);
+    background: #7ec8f7;
+  }
+  #hint { color: #2b3a2b; font-size: 13px; margin-top: 10px; }
+  #hint b { color: #a86f1d; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="game" width="960" height="600"></canvas>
+  <div id="hint">🐝 <b>WASD / arrows</b> fly &nbsp;•&nbsp; land on flowers to gather pollen &nbsp;•&nbsp; carry it home to the hive &nbsp;•&nbsp; <b>1/2/3</b> difficulty &nbsp;•&nbsp; <b>M</b> mute &nbsp;•&nbsp; <b>R</b> restart</div>
+</div>
+<script type="module">
+  import { createGame } from './src/main.js';
+  import { stageShot } from './src/shots.js';
+
+  const canvas = document.getElementById('game');
+  const params = new URLSearchParams(location.search);
+  const shot = params.get('shot');
+  if (shot) {
+    // Screenshot mode: render one deterministic state, no loop, no input.
+    const seed = Number(params.get('seed') || '1');
+    stageShot(canvas, shot, seed);
+    document.title = 'HONEYBEE — shot ' + shot;
+  } else {
+    createGame(canvas).start();
+  }
+</script>
+</body>
+</html>
